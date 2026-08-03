@@ -12,7 +12,8 @@
 
 # Ejecute esta línea una sola vez si no tiene instalado tidyverse:
 # install.packages("tidyverse")
-library(tidyverse)
+library(tidyverse) 
+
 
 ruta_entrada <- "../datos/base_sucia_encuesta.txt"
 ruta_salida  <- "../resultados/base_limpia.csv"
@@ -40,7 +41,6 @@ print(lineas_iniciales)
 
 # 1. Importar la base ----------------------------------------------------------
 
-
 # TODO 2:
 # Complete la importación.
 #
@@ -53,9 +53,9 @@ print(lineas_iniciales)
 
 base <- read_delim(
   file = ruta_entrada,
-  delim = "COMPLETAR",
-  locale = locale(encoding = "COMPLETAR"),
-  na = c("COMPLETAR"),
+  delim = ";",
+  locale = locale(encoding = "UTF-8"),
+  na = c("N/D","N/A"),
   col_types = cols(.default = col_character()),
   trim_ws = FALSE,
   show_col_types = FALSE
@@ -87,7 +87,9 @@ base <- base %>%
   mutate(
     nombre = recode(
       nombre,
-      " Ana María López " = "Ana María López"
+      " Ana María López " = "Ana María López",
+      "JOSE MU—OZ" = "Jose Muñoz"
+      
       # TODO: agregue aquí el otro nombre que necesita corrección.
       # Recuerde poner una coma al final de la línea anterior.
     )
