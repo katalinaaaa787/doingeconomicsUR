@@ -12,7 +12,8 @@
 
 # Ejecute esta línea una sola vez si no tiene instalado tidyverse:
 # install.packages("tidyverse")
-library(tidyverse)
+library(tidyverse) 
+
 
 ruta_entrada <- "../datos/base_sucia_encuesta.txt"
 ruta_salida  <- "../resultados/base_limpia.csv"
@@ -40,7 +41,6 @@ print(lineas_iniciales)
 
 # 1. Importar la base ----------------------------------------------------------
 
-
 # TODO 2:
 # Complete la importación.
 #
@@ -53,9 +53,9 @@ print(lineas_iniciales)
 
 base <- read_delim(
   file = ruta_entrada,
-  delim = "COMPLETAR",
-  locale = locale(encoding = "COMPLETAR"),
-  na = c("COMPLETAR"),
+  delim = ";",
+  locale = locale(encoding = "UTF-8"),
+  na = c("N/D","N/A","-"),
   col_types = cols(.default = col_character()),
   trim_ws = FALSE,
   show_col_types = FALSE
@@ -85,12 +85,21 @@ unique(base$nombre)
 
 base <- base %>%
   mutate(
+    nombre = str_squish(nombre),
+    nombre = str_to_lower(nombre),
     nombre = recode(
       nombre,
-      " Ana María López " = "Ana María López"
+      " Ana María López " = "Ana María López",
+      "JOSE MU—OZ" = "José Muñoz",
+      "LucÌa PÈrez" = "Lucía Pérez",
+      "AndrÈs NiÒo" = "Andrés Niño",
+      "MarÌa JosÈ GÛmez" = "María José Gómez",
+      "SofÌa LeÛn" = "Sofía León"
+      
       # TODO: agregue aquí el otro nombre que necesita corrección.
       # Recuerde poner una coma al final de la línea anterior.
-    )
+    ),
+    nombre = str_to_title(nombre)
   )
 
 
@@ -100,9 +109,15 @@ unique(base$ciudad)
 
 base <- base %>%
   mutate(
+    ciudad = str_squish(ciudad),
+    ciudad = str_to_title(ciudad),
     ciudad = recode(
       ciudad,
-      "Bogotá " = "Bogotá"
+      "Bogotá " = "Bogotá",
+      "medellÌn" = "Medellín",
+      "CALI" = "Cali",
+      "bogot" = "Bogotá"
+      
       # TODO: agregue las demás ciudades que necesitan corrección.
       #
       # Ejemplo:
@@ -121,7 +136,13 @@ base <- base %>%
   mutate(
     fecha_encuesta = recode(
       fecha_encuesta,
-      "03/08/2026" = "2026-08-03"
+      "03/08/2026" = "2026-08-03",
+      "2026-08-04" = "2026-08-04",
+      "5 agosto 2026" = "2026-08-05",
+      "06-08-26" = "2026-08-06",
+      "2026/08/07" = "2026-08-07",
+      "08.08.2026" = "2026-08-08",
+      "08/13/2026" = "2026-08-13"
       # TODO: agregue una línea para cada fecha que todavía
       # no tenga el formato AAAA-MM-DD.
     )
@@ -149,7 +170,10 @@ base <- base %>%
   mutate(
     ingreso_mensual = recode(
       ingreso_mensual,
-      "1.250.000,50" = "1250000.50"
+      "1.250.000,50" = "1250000.50",
+      "1,100,000.00" = "1100000.00",
+      "875.500,00" = "875500.00",
+      "1 050 000,25" = "1050000.25"
       # TODO: agregue los demás ingresos que necesitan corrección.
     )
   )
@@ -172,7 +196,10 @@ base <- base %>%
   mutate(
     nota_promedio = recode(
       nota_promedio,
-      "4,2" = "4.2"
+      "4,2" = "4.2",
+      "4,0" = "4.0",
+      "3,5" = "3.5",
+      "4,1" = "4.1"
       # TODO: agregue las demás notas que usan coma.
     )
   )
@@ -195,7 +222,11 @@ base <- base %>%
   mutate(
     trabaja = recode(
       trabaja,
-      "si " = "Sí"
+      "si " = "Sí",
+      "sí" = "Sí",
+      "Sí " = "Sí",
+      "NO" = "No",
+      "no" = "No"
       # TODO: agregue las demás maneras de escribir Sí y No.
     )
   )
@@ -243,3 +274,4 @@ write_csv(
 )
 
 print("La base limpia fue guardada en resultados/base_limpia.csv")
+
