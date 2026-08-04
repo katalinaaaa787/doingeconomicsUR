@@ -36,4 +36,4 @@ Explique brevemente las principales decisiones que tomó:
 
 ## 3. Enlace de entrega
 
-Pegue aquí el enlace al archivo `scripts/limpieza_base_datos.R` dentro de su *fork*:
+https://github.com/katalinaaaa787/doingeconomicsUR/blob/main/taller_limpieza_datos/scripts/limpieza_base_datos.r
